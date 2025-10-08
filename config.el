@@ -272,6 +272,15 @@
 	  ("NOTE" success bold)
 	  ("DEPRECATED" font-lock-doc-face bold))))
 
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-height 35
+	doom-modeline-bar-width: 5
+	doom-modeline-persp-name t
+	doom-modeline-persp-icon t))
+
 (use-package general
   :ensure t
   :config
