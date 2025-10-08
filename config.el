@@ -126,6 +126,20 @@
 
 (require 'org-tempo)
 
+(use-package git-timemachine
+  :ensure t
+  :after git-timemachine
+  :hook (evil-normalize-keymap . git-timemachine-hook)
+  :config
+  (evil-define-key 'normal git-timemachine-mode-map (kbd "C-j") 'git-timemachine-show-previous-revision)
+  (evil-define-key 'normal git-timemachine-mode-map (kbd "C-k") 'git-timemachine-show-next-revision))
+
+(use-package transient
+  :ensure t
+  :demand t) ; Forces the external package to load immediately
+
+(use-package magit :ensure t)
+
 (use-package general
   :ensure t
   :config

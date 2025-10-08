@@ -175,7 +175,32 @@ Org-tempo is not a separate package but a module within org that can be enabled.
   (require 'org-tempo)
 #+end_src
 
-* General Keybindings
+* GIT PROGRAMS
+** Git Time Machine
+git-timemachine is a program that allows you to move backwards and forwards through a file's commits. =SPC g t= will open the time machine on a file if it is in a git repo. Then, while in normal mode, you can use =CTRL-k= to move backwards and forwards through the commits.
+
+#+begin_src emacs-lisp
+  (use-package git-timemachine
+    :ensure t
+    :after git-timemachine
+    :hook (evil-normalize-keymap . git-timemachine-hook)
+    :config
+    (evil-define-key 'normal git-timemachine-mode-map (kbd "C-j") 'git-timemachine-show-previous-revision)
+    (evil-define-key 'normal git-timemachine-mode-map (kbd "C-k") 'git-timemachine-show-next-revision))
+#+end_src
+
+** Magit
+Magit is full feature git client for Emacs.
+
+#+begin_src emacs-lisp
+  (use-package transient
+    :ensure t
+    :demand t) ; Forces the external package to load immediately
+
+  (use-package magit :ensure t)
+#+end_src
+
+* GENERAL KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
     :ensure t
