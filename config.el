@@ -124,6 +124,8 @@
 
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+(require 'org-tempo)
+
 (use-package general
   :ensure t
   :config
