@@ -98,6 +98,28 @@
   :ensure t
   :commands (buf-move-left buf-move-down buf-move-up buf-move-right))
 
+(use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome back Bipin, Happy Coding!!")
+  (setq dashboard-startup-banner 'logo)
+  ;; (setq dashboard-startup-banner "<path-to-png-file>") ;; use custom image as banner
+  (setq dashboard-startup-banner 'official)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+			  (agenda . 5)
+			  (bookmarks . 3)
+			  (projects . 3)
+			  (registers . 3)))
+  :custom
+  (dashboard-modify-heading-icons '((recents . "file-text")
+				    (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+
 (set-face-attribute 'default nil
   :font "JetBrains Mono"
   :height 110
