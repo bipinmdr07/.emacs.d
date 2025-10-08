@@ -239,6 +239,25 @@
    :diminish
    :hook (company-mode . company-box-mode))
 
+(use-package dired-open
+  :ensure t
+  :config
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				  ("jpg" . "sxiv")
+				  ("png" . "sxiv")
+				  ("mkv" . "mpv")
+				  ("mp4" . "mpv"))))
+
+(use-package peep-dired
+  :ensure t
+  :after dired
+  :hook (evil-normalize-keymaps . peep-dired-hook)
+  :config
+  (evil-define-key 'normal dired-mode-map (kdb "h") 'dired-up-directory)
+  (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-file instead if not using dired-open package
+  (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
+  (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+
 (use-package general
   :ensure t
   :config
