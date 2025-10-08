@@ -220,6 +220,35 @@ Magit is full feature git client for Emacs.
      "/" '(comment-line :wk "Comment lines")
      "u" '(universal-argument :wk "Universal argument"))
 
+    (dt/leader-keys
+      "b" '(:ignore t :wk "Bookmarks/Buffers")
+      "b b" '(switch-to-buffer :wk "Switch to buffer")
+      "b c" '(clone-indirect-buffer :wk "Create indirect buffer copy in a split")
+      "b C" '(clone-indirect-buffer-other-window :wk "Clone indirect buffer in new window")
+      "b d" '(bookmark-delete :wk "Delete bookmark")
+      "b i" '(ibuffer :wk "Ibuffer")
+      "b k" '(kill-current-buffer :wk "Kill current buffer")
+      "b K" '(kill-some-buffers :wk "Kill multiple buffers")
+      "b l" '(list-bookmarks :wk "List bookmarks")
+      "b m" '(bookmarks-set :wk "Set bookmark")
+      "b n" '(next-buffer :wk "Next buffer")
+      "b p" '(previous-buffer :wk "Previous buffer")
+      "b r" '(revert-buffer :wk "Reload buffer")
+      "b R" '(rename-buffer :wk "Rename buffer")
+      "b s" '(basic-save-buffer :wk "Save buffer")
+      "b S" '(save-some-buffers :wk "Save multiple buffers")
+      "b w" '(bookmark-save :wk "Save current bookmarks to bookmark file"))
+
+    (dt/leader-keys
+      "g" '(:ignore t :wk "Git")
+      "g F" '(magit-fetch :wk "Git fetch")
+      "g g" '(magit-status :wk "Magit status")
+      "g i" '(magit-init :wk "Initialize git repo")
+      "g l" '(magit-log-buffer-file :wk "Magit buffer log")
+      "g s" '(magit-stage-buffer-file :wk "Git stage current file")
+      "g t" '(git-timemachine :wk "Git time machine")
+      "g u" '(magit-stage-buffer-file :wk "Git unstage current file"))
+
     )
 #+end_src
 
