@@ -9,6 +9,7 @@
 # Compiled files and caches
 /eln-cache/
 *.elc
+*.eld
 auto-save-list
 bookmarks
 url-history
@@ -16,3 +17,4 @@ custom.el
 tramp
 transient
 recentf
+sessions

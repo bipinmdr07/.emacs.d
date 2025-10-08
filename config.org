@@ -384,15 +384,22 @@ Adding highlight to TODO and related words.
 The modeline is the bottom status bar that appears in Emacs windows. While you can create your own custom modeline, why go the trouble when Doom Emacs already has a nice modeline package available. For more information on what is available to configure in the Doom modeline checkout: [[https://github.com/seagle0128/doom-modeline][Doom Modeline]].
 
 #+begin_src emacs-lisp
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-height 35
-  	doom-modeline-bar-width: 5
-  	doom-modeline-persp-name t
-  	doom-modeline-persp-icon t))
+  ;; Explicit recipe to tell Elpaca how to install doom-modeline
+  (elpaca (doom-modeline :host github :repo "doomemacs/doom-modeline"))
 
+  (elpaca-wait)
+
+  ;; Load and configure doom-modeline manually
+  (require 'doom-modeline)
+
+  ;; Enable the modeline
+  (doom-modeline-mode 1)
+
+  ;; Customize settings
+  (setq doom-modeline-height 35
+        doom-modeline-bar-width 5
+        doom-modeline-persp-name t
+        doom-modeline-persp-icon t)
 #+end_src
 
 * PERSPECTIVE
@@ -420,10 +427,24 @@ The modeline is the bottom status bar that appears in Emacs windows. While you c
   (add-hook 'kill-emacs-hook #'persp-state-save)
 #+end_src
 
+* PROJECTILE
+[[https://github.com/bbatsov/projectile][Projectile]] is a project interactive library for Emacs. Avoid =fish shell= to avoid any issue.
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :demand t
+    :config
+    (projectile-mode 1)
+    )
+
+#+end_src
+
 * GENERAL KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
     :ensure t
+    :after evil
     :config
     (general-evil-setup)
 
@@ -549,6 +570,9 @@ The modeline is the bottom status bar that appears in Emacs windows. While you c
       "o d" '(dashboard-open :wk "Dashboard")
       "o f" '(make-frame :wk "Open buffer in new frame")
       "o F" '(select-frame-by-name :wk "Select frame by name"))
+
+    (bipin/leader-keys
+      "p" '(:keymap projectile-command-map :package projectile :wk "Projectile"))
 
     (bipin/leader-keys
       "t" '(:ignore t :wk "Toggle")

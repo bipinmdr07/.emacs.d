@@ -272,14 +272,22 @@
 	  ("NOTE" success bold)
 	  ("DEPRECATED" font-lock-doc-face bold))))
 
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-height 35
-	doom-modeline-bar-width: 5
-	doom-modeline-persp-name t
-	doom-modeline-persp-icon t))
+;; Explicit recipe to tell Elpaca how to install doom-modeline
+(elpaca (doom-modeline :host github :repo "doomemacs/doom-modeline"))
+
+(elpaca-wait)
+
+;; Load and configure doom-modeline manually
+(require 'doom-modeline)
+
+;; Enable the modeline
+(doom-modeline-mode 1)
+
+;; Customize settings
+(setq doom-modeline-height 35
+      doom-modeline-bar-width 5
+      doom-modeline-persp-name t
+      doom-modeline-persp-icon t)
 
 (use-package perspective
   :ensure t
@@ -301,8 +309,16 @@
 ;; Automatically save perspective states to file when Emacs exists.
 (add-hook 'kill-emacs-hook #'persp-state-save)
 
+(use-package projectile
+  :ensure t
+  :demand t
+  :config
+  (projectile-mode 1)
+  )
+
 (use-package general
   :ensure t
+  :after evil
   :config
   (general-evil-setup)
 
@@ -428,6 +444,9 @@
     "o d" '(dashboard-open :wk "Dashboard")
     "o f" '(make-frame :wk "Open buffer in new frame")
     "o F" '(select-frame-by-name :wk "Select frame by name"))
+
+  (bipin/leader-keys
+    "p" '(:keymap projectile-command-map :package projectile :wk "Projectile"))
 
   (bipin/leader-keys
     "t" '(:ignore t :wk "Toggle")
