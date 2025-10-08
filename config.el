@@ -1,13 +1,3 @@
-#+TITLE: GNU Emacs Configuration
-#+AUTHOR: Bipin Manandhar
-#+DESCRIPTION: Bipin's personal Emacs configuration.
-#+STARTUP: showeverything
-#+OPTIONS: toc:2
-
-* IMPORTANT PROGRAMS TO LOAD FIRST
-** Elpaca Package Manager
-
-#+begin_src emacs-lisp
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -46,4 +36,3 @@
     (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
-#+end_src
