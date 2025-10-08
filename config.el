@@ -150,19 +150,19 @@
   (general-evil-setup)
 
   ;; setup 'SPC' as the global leader key
-  (general-create-definer dt/leader-keys
+  (general-create-definer bipin/leader-keys
 			  :states '(normal insert visual emacs)
 			  :keymaps 'override
 			  :prefix "SPC" ;; set leader
 			  :global-prefix "C-SPC") ;; access leader in insert mode
 
-  (dt/leader-keys
+  (bipin/leader-keys
    "." '(find-file :wk "Find file")
    "=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
    "/" '(comment-line :wk "Comment lines")
    "u" '(universal-argument :wk "Universal argument"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "b" '(:ignore t :wk "Bookmarks/Buffers")
     "b b" '(switch-to-buffer :wk "Switch to buffer")
     "b c" '(clone-indirect-buffer :wk "Create indirect buffer copy in a split")
@@ -181,7 +181,7 @@
     "b S" '(save-some-buffers :wk "Save multiple buffers")
     "b w" '(bookmark-save :wk "Save current bookmarks to bookmark file"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "f" '(:ignore t :wk "Files")
     "f c" '((lambda () (interactive)
 	      (find-file "~/.emacs.d/config.org"))
@@ -190,7 +190,7 @@
 	      (find-fie "~/.emacs.d/init.el"))
 	    :wk "Open emacs init.el"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "g" '(:ignore t :wk "Git")
     "g F" '(magit-fetch :wk "Git fetch")
     "g g" '(magit-status :wk "Magit status")
@@ -200,7 +200,7 @@
     "g t" '(git-timemachine :wk "Git time machine")
     "g u" '(magit-stage-buffer-file :wk "Git unstage current file"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "n" '(:ignore t :wk "Org")
     "n a" '(org-agenda :wk "Org agenda")
     "n e" '(org-export-dispatch :wk "Org export dispatch")
@@ -208,28 +208,28 @@
     "n t" '(org-todo :wk "Org todo")
     "n T" '(org-todo-list :wk "Org todo list"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "m" '(:ignore t :wk "Org more")
     "m b" '(:ignore t :wk "Tables")
     "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "m d" '(:ignore t :wk "Date/deadline")
     "m d t" '(org-time-stamp :wk "Org time stamp"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "o" '(:ignore t :wk "Open")
     "o d" '(dashboard-open :wk "Dashboard")
     "o f" '(make-frame :wk "Open buffer in new frame")
     "o F" '(select-frame-by-name :wk "Select frame by name"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "t" '(:ignore t :wk "Toggle")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t o" '(org-mode :wk "Toggle org mode")
     "t t" '(visual-line-mode :wk "Toggle truncated lines"))
 
-  (dt/leader-keys
+  (bipin/leader-keys
     "w" '(:ignore t :wk "Windows")
     ;; Window splits
     "w c" '(evil-window-delete :wk "Close window")
