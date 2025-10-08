@@ -84,6 +84,10 @@
 ;;Useful for configuring built-in emacs features.
 (use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
 
+(use-package buffer-move
+  :ensure t
+  :commands (buf-move-left buf-move-down buf-move-up buf-move-right))
+
 (set-face-attribute 'default nil
   :font "JetBrains Mono"
   :height 110
@@ -224,6 +228,25 @@
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t o" '(org-mode :wk "Toggle org mode")
     "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+
+  (dt/leader-keys
+    "w" '(:ignore t :wk "Windows")
+    ;; Window splits
+    "w c" '(evil-window-delete :wk "Close window")
+    "w n" '(evil-window-new :wk "New window")
+    "w s" '(evil-window-split :wk "Horizontal split window")
+    "w v" '(evil-window-vsplit :wk "Vertical split window")
+    ;; Window motions
+    "w h" '(evil-window-left :wk "Window left")
+    "w j" '(evil-window-down :wk "Window down")
+    "w k" '(evil-window-up :wk "Window up")
+    "w l" '(evil-window-right :wk "Window right")
+    "w w" '(evil-window-next :wk "Goto next window")
+    ;; Move Windows
+    "w H" '(buf-move-left :wk "Buffer move left")
+    "w J" '(buf-move-down :wk "Buffer move down")
+    "w K" '(buf-move-up :wk "Buffer move up")
+    "w L" '(buf-move-right :wk "Buffer move right"))
 
   )
 
