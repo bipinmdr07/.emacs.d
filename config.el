@@ -116,6 +116,14 @@
   :ensure t
   :hook (org-mode . toc-org-enable))
 
+(add-hook 'org-mode-hook 'org-indent-mode)
+
+(use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode))
+
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
 (use-package general
   :ensure t
   :config
