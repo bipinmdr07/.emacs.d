@@ -135,6 +135,14 @@ Defining the variaous fonts that Emacs will use.
 (setq-default line-spacing 0.12)
 #+end_src
 
+* ORG MODE
+** Enable Table of Contents
+#+begin_src emacs-lisp
+  (use-package toc-org
+    :ensure t
+    :hook (org-mode . toc-org-enable))
+#+end_src
+
 * General Keybindings
 #+begin_src emacs-lisp
   (use-package general

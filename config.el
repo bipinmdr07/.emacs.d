@@ -112,6 +112,10 @@
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
 
+(use-package toc-org
+  :ensure t
+  :hook (org-mode . toc-org-enable))
+
 (use-package general
   :ensure t
   :config
