@@ -296,6 +296,12 @@
     "b w" '(bookmark-save :wk "Save current bookmarks to bookmark file"))
 
   (bipin/leader-keys
+    "d" '(:ignore t :wk "Dired")
+    "d d" '(dired :wk "Open dired")
+    "d j" '(dired-jump :wk "Dired jump to current")
+    "d p" '(peep-dired :wk "Peep-dired"))
+
+  (bipin/leader-keys
     "f" '(:ignore t :wk "Files")
     "f c" '((lambda () (interactive)
 	      (find-file "~/.emacs.d/config.org"))
