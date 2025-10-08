@@ -258,6 +258,20 @@
   (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
 
+(use-package hl-todo
+  :ensure t
+  :hook ((org-mode . hl-todo-mode)
+	 (prog-mode . hl-todo-mode))
+  :config
+  (setq hl-todo-highlight-punctuation ":"
+	hl-todo-keyword-faces
+	`(("TODO" warning bold)
+	  ("FIXME" error bold)
+	  ("HACK" font-lock-constant-face-bold)
+	  ("REVIEW" font-lock-keyword-face bold)
+	  ("NOTE" success bold)
+	  ("DEPRECATED" font-lock-doc-face bold))))
+
 (use-package general
   :ensure t
   :config
