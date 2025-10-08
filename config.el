@@ -45,6 +45,16 @@
       (exec-path-from-shell-copy-envs
        '("PATH" "LIBRARY_PATH" "CPATH" "PKG_CONFIG_PATH")))))
 
+;; (use-package all-the-icons
+;;   :ensure t
+;;   :if (display-graphic-p))
+
+;; (use-package all-the-icons-dired
+;;   :ensure t
+;;   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+
+(setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
+
 ;; Install a package via the elpaca macro
 ;; See the "recipes" section of the manual for more details.
 
@@ -199,6 +209,40 @@
     "g s" '(magit-stage-buffer-file :wk "Git stage current file")
     "g t" '(git-timemachine :wk "Git time machine")
     "g u" '(magit-stage-buffer-file :wk "Git unstage current file"))
+
+  (bipin/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h b" '(describe-bindings :wk "Describe bindings")
+    "h c" '(describe-char :wk "Describe character under corsor")
+    "h d" '(:ignore t :wk "Emacs documentation")
+    "h d a" '(about-emacs :wk "About Emacs")
+    "h d d" '(view-emacs-debugging :wk "View Emacs debugging")
+    "h d f" '(view-emacs-FAQ :wk "View Emacs FAQ")
+    "h d m" '(info-emacs-manual :wk "The Emacs manual")
+    "h d n" '(view-emacs-news :wk "View Emacs news")
+    "h d o" '(describe-distribution :wk "How to obtain Emacs")
+    "h d p" '(view-emacs-problems :wk "View Emacs problems")
+    "h d t" '(view-emacs-todo :wk "View Emacs todo")
+    "h d w" '(describe-no-warranty :wk "Describe no warranty")
+    "h e" '(view-echo-area-messages :wk "View echo area messages")
+    "h f" '(describe-function :wk "Describe function")
+    "h F" '(describe-face :wk "Describe face")
+    "h g" '(describe-gnu-project :wk "Describe GNU Project")
+    "h i" '(info :wk "Info")
+    "h I" '(describe-input-method :wk "Describe input method")
+    "h k" '(describe-key :wk "Describe key")
+    "h l" '(view-lossage :wk "Display recent keystroke and the commands run")
+    "h L" '(describe-language-environment :wk "Describe language environment")
+    "h m" '(describe-mode :wk "Describe mode")
+    "h r" '(:ignore t :wk "Reload")
+    "h r r" '((lambda () (interactive)
+		(load-file "~/.emacs.d/init.el")
+		(ignore (elpaca-process-queues)))
+	      :wk "Reload emacs config")
+    "h t" '(load-theme :wk "Load theme")
+    "h v" '(describe-variable :wk "Describe variable")
+    "h w" '(where-is :wk "Prints keybinding for command if set")
+    "h x" '(describe-command :wk "Display full documentation for command"))
 
   (bipin/leader-keys
     "n" '(:ignore t :wk "Org")
