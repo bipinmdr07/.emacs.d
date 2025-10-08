@@ -281,6 +281,26 @@
 	doom-modeline-persp-name t
 	doom-modeline-persp-icon t))
 
+(use-package perspective
+  :ensure t
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
+  :init
+  (persp-mode)
+  :config
+  ;; Sets a file to write to when we save states
+  (setq persp-state-default-file "~/.emacs.d/sessions"))
+
+;; This will group buffers by persp-name in ibuffer.
+(add-hook 'ibuffer-hook
+	  (lambda ()
+	    (persp-ibuffer-set-filter-groups)
+	    (unless (eq ibuffer-sorting-mode 'alphabetic)
+	      (ibuffer-do-sort-by-alphabetic))))
+
+;; Automatically save perspective states to file when Emacs exists.
+(add-hook 'kill-emacs-hook #'persp-state-save)
+
 (use-package general
   :ensure t
   :config
