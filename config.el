@@ -83,3 +83,23 @@
 ;;Note this will cause evaluate the declaration immediately. It is not deferred.
 ;;Useful for configuring built-in emacs features.
 (use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
+
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup)
+
+  ;; setup 'SPC' as the global leader key
+  (general-create-definer dt/leader-keys
+			  :states '(normal insert visual emacs)
+			  :keymaps 'override
+			  :prefix "SPC" ;; set leader
+			  :global-prefix "C-SPC") ;; access leader in insert mode
+
+  (dt/leader-keys
+   "." '(find-file :wk "Find file")
+   "=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
+   "/" '(comment-line :wk "Comment lines")
+   "u" '(universal-argument :wk "Universal argument"))
+
+  )
