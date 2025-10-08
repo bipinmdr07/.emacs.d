@@ -1,0 +1,16 @@
+.DS_Store
+
+# Directories managed by package managers
+/elpa/
+/straight/
+/elpaca/
+/packages/ # if you use package.el directly
+
+# Compiled files and caches
+/eln-cache/
+*.elc
+auto-save-list
+bookmarks
+url-history
+custom.el
+tramp
