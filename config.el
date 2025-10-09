@@ -272,6 +272,8 @@
 	  ("NOTE" success bold)
 	  ("DEPRECATED" font-lock-doc-face bold))))
 
+(global-set-key [escape] 'keyboard-escape-quit)
+
 ;; Explicit recipe to tell Elpaca how to install doom-modeline
 (elpaca (doom-modeline :host github :repo "doomemacs/doom-modeline"))
 
@@ -435,6 +437,12 @@
   :after (treemacs)
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
+
+(use-package flycheck
+  :ensure t
+  :defer t
+  :diminish
+  :init (global-flycheck-mode))
 
 (use-package general
   :ensure t

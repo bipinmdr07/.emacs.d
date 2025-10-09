@@ -380,6 +380,14 @@ Adding highlight to TODO and related words.
 
 #+end_src
 
+* MINIBUFFER ESCAPE
+By default, Emacs require you to hit ESC three times to escape quit the minibuffer.
+
+#+begin_src emacs-lisp
+  (global-set-key [escape] 'keyboard-escape-quit)
+
+#+end_src
+
 * MODELINE
 The modeline is the bottom status bar that appears in Emacs windows. While you can create your own custom modeline, why go the trouble when Doom Emacs already has a nice modeline package available. For more information on what is available to configure in the Doom modeline checkout: [[https://github.com/seagle0128/doom-modeline][Doom Modeline]].
 
@@ -563,6 +571,18 @@ The modeline is the bottom status bar that appears in Emacs windows. While you c
     :after (treemacs)
     :ensure t
     :config (treemacs-set-scope-type 'Tabs))
+
+#+end_src
+
+* FLYCHECK
+Flycheck checks the syntax and lint issue on the fly for the current file. For more information on language support for flycheck, [[https://www.flycheck.org/en/latest/languages.html][read this]].
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :diminish
+    :init (global-flycheck-mode))
 
 #+end_src
 
