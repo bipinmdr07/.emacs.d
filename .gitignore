@@ -10,6 +10,7 @@
 /eln-cache/
 *.elc
 *.eld
+*.~undo-tree~
 auto-save-list
 bookmarks
 url-history

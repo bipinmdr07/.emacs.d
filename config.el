@@ -167,6 +167,25 @@
 
 (require 'org-tempo)
 
+(use-package deft
+  :ensure t
+  :diminish
+  :init
+  (setq deft-recursive t
+	deft-width-offset 50)
+  (setq-local truncate-lines t)
+  :config
+  (setq deft-directory "~/Sync/org"
+                deft-extensions '("txt" "org")
+		deft-ignore-file-regexp
+		"\\.sync-conflict-.*\\.org\\'"
+		)
+  :hook (deft-mode . (lambda ()
+		       "Custom settings for the deft-mode buffer"
+		       (visual-line-mode -1)
+		       (setq-local truncate-lines t)))
+)
+
 (use-package git-timemachine
   :ensure t
   :after git-timemachine
@@ -566,6 +585,7 @@
   (bipin/leader-keys
     "n" '(:ignore t :wk "Org")
     "n a" '(org-agenda :wk "Org agenda")
+    "n d" '(deft :wk "Deft")
     "n e" '(org-export-dispatch :wk "Org export dispatch")
     "n i" '(org-toggle-item :wk "Org toggle item")
     "n t" '(org-todo :wk "Org todo")
