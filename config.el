@@ -66,12 +66,12 @@
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
   :ensure t
-:demand t
-:init
-(setq evil-want-integration t
-      evil-want-keybinding nil)
-:config
-(evil-mode 1)) ;; Globally enabling evil mode
+  :demand t
+  :init
+  (setq evil-want-integration t
+	evil-want-keybinding nil)
+  :config
+  (evil-mode 1)) ;; Globally enabling evil mode
 
 
 (use-package evil-collection
@@ -85,6 +85,13 @@
 ;;Note this will cause evaluate the declaration immediately. It is not deferred.
 ;;Useful for configuring built-in emacs features.
 (use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
+
+(use-package evil-surround
+  :ensure t
+  :after evil
+  :config
+  (global-evil-surround-mode 1)
+  )
 
 (use-package all-the-icons
   :ensure t
@@ -689,6 +696,10 @@
 (scroll-bar-mode -1) ;; Disable the scroll bar
 (tool-bar-mode -1) ;; Disable the tool bar
 (setq org-edit-src-content-indentation 0) ;; Set src bloc automatic indent to 0 instead of 2.
+
+;; set relaive line numbers globally
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode t)
 
 (use-package shell-pop
   :ensure t
