@@ -617,10 +617,39 @@
 
   )
 
+(use-package smartparens
+:ensure t
+:init
+(smartparens-global-mode 1))
+
+(use-package undo-tree
+:ensure t
+:after evil
+:diminish
+:config
+;; tell evil-mode to use undo-tree for undo/redo
+(evil-set-undo-system 'undo-tree)
+
+;; Activate the undo-tree minor mode globally
+(global-undo-tree-mode 1))
+
+(delete-selection-mode 1) ;; You can select text and delete it by typing.
+(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
+;; The following prevents from auto-pairing when electric-pair-mode is on.
+;; Otherwise, org-tempo is broken when you try to <s Tab... "<"
+
+(global-auto-revert-mode t) ;; Automatically show changes if the file has changed
+(global-display-line-numbers-mode 1) ;; Display line numbers
+(global-visual-line-mode t) ;; Enable truncated lines
+(menu-bar-mode -1) ;; Disable the menu bar
+(scroll-bar-mode -1) ;; Disable the scroll bar
+(tool-bar-mode -1) ;; Disable the tool bar
+(setq org-edit-src-content-indentation 0) ;; Set src bloc automatic indent to 0 instead of 2.
+
 (use-package doom-themes
   :ensure t
   :custom
-  ;; Global settings (defaults)
+  ;; Global > settings (defaults)
   (doom-themes-enable-bold t)
   (doom-themes-enable-italic t)
   ;; for treemacs users
