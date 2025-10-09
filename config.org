@@ -880,6 +880,29 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 )
 #+end_src
 
+* SNIPPETS
+** YASnippet
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :hook ((prog-mode . yas-minor-mode)
+	 (org-mode . yas-minor-mode))
+  :config
+  (setq yas-snippet-directly
+	'("~/.emacs.d/snippets" ;; custom snippets location
+	  "~/.emacs.d/elpaca/repos/doom-snippets"))
+  (yas-reload-all)
+)
+#+end_src
+
+** Doom snippets
+#+begin_src emacs-lisp
+;; This will clone the package inside elpaca/repos/doom-snippets
+(elpaca (doom-snippets :host github :repo "doomemacs/snippets" :depends (yasnippet)))
+(elpaca-wait)
+#+end_src
+
 * THEME
 #+begin_src emacs-lisp
   (use-package doom-themes

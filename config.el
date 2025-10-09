@@ -703,6 +703,22 @@
 	shell-pop-cleanup-buffer-at-process-exit t)
 )
 
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :hook ((prog-mode . yas-minor-mode)
+	 (org-mode . yas-minor-mode))
+  :config
+  (setq yas-snippet-directly
+	'("~/.emacs.d/snippets" ;; custom snippets location
+	  "~/.emacs.d/elpaca/repos/doom-snippets"))
+  (yas-reload-all)
+)
+
+;; This will clone the package inside elpaca/repos/doom-snippets
+(elpaca (doom-snippets :host github :repo "doomemacs/snippets" :depends (yasnippet)))
+(elpaca-wait)
+
 (use-package doom-themes
   :ensure t
   :custom
