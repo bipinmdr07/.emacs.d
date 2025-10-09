@@ -678,7 +678,7 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
     "d" '(:ignore t :wk "Dired")
     "d d" '(dired :wk "Open dired")
     "d j" '(dired-jump :wk "Dired jump to current")
-    "d p" '(peep-dired :wk "Peep-dired")
+    "d p" '(peep-dired :wk "Peep-dired"))
 
   (bipin/leader-keys
     "f" '(:ignore t :wk "Files")
@@ -843,6 +843,7 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 #+begin_src emacs-lisp
 (use-package shell-pop
   :ensure t
+  :hook ((shell-mode . (lambda () (company-mode -1))))
   :config
   (setq shell-pop-mode +1
 	shell-pop-term-shell "/bin/zsh"
