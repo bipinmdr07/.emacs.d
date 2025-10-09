@@ -59,20 +59,6 @@
        '("PATH" "LIBRARY_PATH" "CPATH" "PKG_CONFIG_PATH")))))
 #+end_src
 
-** ALL THE ICONS
-This is an icon set that can be used with dashboard, dired, ibuffer and other Emacs programs.
-
-#+begin_src emacs-lisp
-  ;; (use-package all-the-icons
-  ;;   :ensure t
-  ;;   :if (display-graphic-p))
-
-  ;; (use-package all-the-icons-dired
-  ;;   :ensure t
-  ;;   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
-
-#+end_src
-
 ** BACKUP
 By default, Emacs creates automatic backups of file in their original directories, such =file.el= and the backup =file.el~=. This leads to a lot of clutter, so let's tell Emacs to put all backups that it creates in the =Trash= directory.
 
@@ -121,6 +107,21 @@ By default, Emacs creates automatic backups of file in their original directorie
   ;;Useful for configuring built-in emacs features.
   (use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
 #+end_src
+
+** ALL THE ICONS
+This is an icon set that can be used with dashboard, dired, ibuffer and other Emacs programs.
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :ensure t
+    :if (display-graphic-p))
+
+  (use-package all-the-icons-dired
+    :ensure t
+    :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+
+#+end_src
+
 
 ** Buffer move
 #+begin_src emacs-lisp

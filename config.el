@@ -45,14 +45,6 @@
       (exec-path-from-shell-copy-envs
        '("PATH" "LIBRARY_PATH" "CPATH" "PKG_CONFIG_PATH")))))
 
-;; (use-package all-the-icons
-;;   :ensure t
-;;   :if (display-graphic-p))
-
-;; (use-package all-the-icons-dired
-;;   :ensure t
-;;   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
-
 (setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
 
 ;; Install a package via the elpaca macro
@@ -93,6 +85,14 @@
 ;;Note this will cause evaluate the declaration immediately. It is not deferred.
 ;;Useful for configuring built-in emacs features.
 (use-package emacs :ensure nil :config (setq ring-bell-function #'ignore))
+
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
+
+(use-package all-the-icons-dired
+  :ensure t
+  :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
 
 (use-package buffer-move
   :ensure t
