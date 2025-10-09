@@ -115,6 +115,11 @@ By default, Emacs creates automatic backups of file in their original directorie
   )
 #+end_src
 
+** Restart Emacs
+Package to add capability to restart emacs with keybinding.
+#+begin_src emacs-lisp
+(use-package restart-emacs :ensure t)
+#+end_src
 ** ALL THE ICONS
 This is an icon set that can be used with dashboard, dired, ibuffer and other Emacs programs.
 
@@ -307,6 +312,21 @@ Magit is full feature git client for Emacs.
       (insert (concat branch ": ")))))
 
 (add-hook 'git-commit-setup-hook #'bipin/add-branch-name-to-commit-message)
+#+end_src
+
+*** Accepting the both changes from the buffer A and B in ediff.
+#+begin_src emacs-lisp
+(defun bipin/ediff-copy-both-to-C ()
+  "Copy both A and B variants into buffer C at the current difference."
+  (interactive)
+  (ediff-copy-diff ediff-current-difference nil 'C nil
+		   (concat
+		    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+		    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+
+(add-hook 'ediff-keymap-setup-hook
+	  (lambda ()
+	    (define-key ediff-mode-map (kbd "B") #'bipin/ediff-copy-both-to-C)))
 #+end_src
 
 * DIMINISH
@@ -817,6 +837,10 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
 
   (bipin/leader-keys
     "p" '(:keymap projectile-command-map :package projectile :wk "Projectile"))
+  
+  (bipin/leader-keys
+    "q" '(:ignore t :wk "Quit")
+    "q r" '(restart-emacs :wk "Restart emacs"))
 
   (bipin/leader-keys
     "t" '(:ignore t :wk "Toggle")

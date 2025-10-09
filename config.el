@@ -93,6 +93,8 @@
   (global-evil-surround-mode 1)
   )
 
+(use-package restart-emacs :ensure t)
+
 (use-package all-the-icons
   :ensure t
   :if (display-graphic-p))
@@ -218,6 +220,18 @@
       (insert (concat branch ": ")))))
 
 (add-hook 'git-commit-setup-hook #'bipin/add-branch-name-to-commit-message)
+
+(defun bipin/ediff-copy-both-to-C ()
+  "Copy both A and B variants into buffer C at the current difference."
+  (interactive)
+  (ediff-copy-diff ediff-current-difference nil 'C nil
+		   (concat
+		    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+		    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+
+(add-hook 'ediff-keymap-setup-hook
+	  (lambda ()
+	    (define-key ediff-mode-map (kbd "B") #'bipin/ediff-copy-both-to-C)))
 
 (use-package diminish :ensure t)
 
@@ -652,6 +666,10 @@
 
   (bipin/leader-keys
     "p" '(:keymap projectile-command-map :package projectile :wk "Projectile"))
+  
+  (bipin/leader-keys
+    "q" '(:ignore t :wk "Quit")
+    "q r" '(restart-emacs :wk "Restart emacs"))
 
   (bipin/leader-keys
     "t" '(:ignore t :wk "Toggle")
