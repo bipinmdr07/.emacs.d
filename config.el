@@ -205,7 +205,19 @@
   :ensure t
   :demand t) ; Forces the external package to load immediately
 
-(use-package magit :ensure t)
+(use-package magit
+  :ensure t
+  :config
+  (add-hook 'git-commit-setup-hook #'evil-insert-state))
+
+(defun bipin/add-branch-name-to-commit-message ()
+  "Prepare the current branch name to the commit message, unless it's a common env branch."
+  (let* ((branch (magit-get-current-branch))
+	 (excluded-branches '("dev" "qa" "staging" "preprod" "master" "prod" "main")))
+    (unless (member branch excluded-branches)
+      (insert (concat branch ": ")))))
+
+(add-hook 'git-commit-setup-hook #'bipin/add-branch-name-to-commit-message)
 
 (use-package diminish :ensure t)
 
