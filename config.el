@@ -470,11 +470,34 @@
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
 
+(defun bipin/flycheck-set-temp-dir ()
+  "Create and set the Emacs temporary directory for Flycheck."
+  (let ((tmp-dir (expand-file-name "tmp/flycheck/" user-emacs-directory)))
+    (unless (file-directory-p tmp-dir)
+      (make-directory tmp-dir t))
+    (setq temporary-file-directory tmp-dir)))
+
+(defun bipin/flycheck-cleanup-temp-file ()
+  "Delete Flycheck's temporary file when killing a buffer."
+  (when (fboundp 'flycheck-delete-temp-file)
+    (flycheck-delete-temp-file)))
+
 (use-package flycheck
   :ensure t
   :defer t
   :diminish
-  :init (global-flycheck-mode))
+  :init
+  ;; Set up temporary directory before enabling flycheck
+  (bipin/flycheck-set-temp-dir)
+  (global-flycheck-mode)
+  :config
+  ;; Clean up temp files when buffer is killed
+  (add-hook 'kill-buffer-hook #'bipin/flycheck-cleanup-temp-file)
+  (add-hook 'kill-emacs-hook
+          (lambda ()
+            (delete-directory (expand-file-name "tmp/flycheck/" user-emacs-directory)
+                              t)))  ;; t = recursive delete
+)
 
 (use-package general
   :ensure t
@@ -613,8 +636,10 @@
 
   (bipin/leader-keys
     "t" '(:ignore t :wk "Toggle")
+    "t f" '(flycheck-mode :wk "Toggle flycheck")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t o" '(org-mode :wk "Toggle org mode")
+    "t r" '(rainbow-mode :wk "Toggle rainbow mode")
     "t t" '(visual-line-mode :wk "Toggle truncated lines"))
 
   (bipin/leader-keys
