@@ -291,6 +291,19 @@
       doom-modeline-persp-name t
       doom-modeline-persp-icon t)
 
+(use-package rainbow-delimiters
+  :ensure t
+  :defer t
+  :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
+	 (clojure-mode . rainbow-delimiters-mode)
+	 (prog-mode . rainbow-delimiters-mode)))
+
+(use-package rainbow-mode
+  :ensure t
+  :defer t
+  :diminish
+  :hook org-mode prog-mode)
+
 (use-package perspective
   :ensure t
   :custom
