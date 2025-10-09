@@ -148,7 +148,7 @@
 ;; This sets the default font on all graphical frames created after restarting Emacs.
 ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
 ;; are not right unless I also add this method of setting the default font.
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono-11"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-14"))
 
 ;; Uncomment the following line if line spacing needs adjusting.
 (setq-default line-spacing 0.12)
@@ -605,7 +605,8 @@
     "o d" '(dashboard-open :wk "Dashboard")
     "o f" '(make-frame :wk "Open buffer in new frame")
     "o F" '(select-frame-by-name :wk "Select frame by name")
-    "o p" '(treemacs :wk "toggle treemacs"))
+    "o p" '(treemacs :wk "toggle treemacs")
+    "o t" '(shell-pop :wk "toggle terminal"))
 
   (bipin/leader-keys
     "p" '(:keymap projectile-command-map :package projectile :wk "Projectile"))
@@ -655,8 +656,6 @@
 
 (delete-selection-mode 1) ;; You can select text and delete it by typing.
 (electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
-;; The following prevents from auto-pairing when electric-pair-mode is on.
-;; Otherwise, org-tempo is broken when you try to <s Tab... "<"
 
 (global-auto-revert-mode t) ;; Automatically show changes if the file has changed
 (global-display-line-numbers-mode 1) ;; Display line numbers
@@ -665,6 +664,19 @@
 (scroll-bar-mode -1) ;; Disable the scroll bar
 (tool-bar-mode -1) ;; Disable the tool bar
 (setq org-edit-src-content-indentation 0) ;; Set src bloc automatic indent to 0 instead of 2.
+
+(use-package shell-pop
+  :ensure t
+  :hook ((shell-mode . (lambda () (company-mode -1))))
+  :config
+  (setq shell-pop-mode +1
+	shell-pop-term-shell "/bin/zsh"
+	shell-pop-full-span t
+	shell-pop-window-position "bottom"
+	shell-pop-autocd-to-working-dir t
+	shell-pop-restore-window-configuration t
+	shell-pop-cleanup-buffer-at-process-exit t)
+)
 
 (use-package doom-themes
   :ensure t
