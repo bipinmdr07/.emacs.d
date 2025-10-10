@@ -741,6 +741,16 @@ If REVERSE is non-nil (e.g. from prefix arg or wrapper), cycle backward."
   
   (bipin/leader-keys
     "q" '(:ignore t :wk "Quit")
+    "q q" '((lambda ()
+	    "Save all buffers and quite Emacs."
+	      (interactive)
+	      (save-buffers-kill-emacs))
+	    :wk "Quit emacs")
+    "q Q" '((lambda ()
+	      "Quit emacs qithout saving anything"
+	      (interactive)
+	      (kill-emacs))
+	    :wk "Quit emacs without saving")
     "q r" '(restart-emacs :wk "Restart emacs"))
 
   (bipin/leader-keys
