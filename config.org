@@ -1042,6 +1042,15 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 
 #+end_src
 
+** Evil Multiedit
+#+begin_src emacs-lisp
+(use-package evil-multiedit
+  :ensure t
+  :after evil
+  :config
+  (evil-multiedit-default-keybinds))
+#+end_src
+
 * THEME
 #+begin_src emacs-lisp
   (use-package doom-themes

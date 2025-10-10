@@ -828,6 +828,12 @@
 	  ("JSON" prettier)
 	  ("Go" gofmt))))
 
+(use-package evil-multiedit
+  :ensure t
+  :after evil
+  :config
+  (evil-multiedit-default-keybinds))
+
 (use-package doom-themes
   :ensure t
   :custom
