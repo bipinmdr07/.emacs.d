@@ -195,6 +195,78 @@
 		       (setq-local truncate-lines t)))
 )
 
+(defun bipin/org-insert-heading-with-checkbox ()
+  "Insert new heading with checkbox if current line has one."
+  (interactive)
+  (let* ((current-line (thing-at-point 'line t))
+	 (has-checkbox (and current-line
+			 (string-match-p "\\[[- X]\\]" current-line))))
+    (if has-checkbox
+	(progn
+	  (org-insert-heading)
+	  (insert "[ ] "))
+      (org-insert-heading)))) ;; fallback to default behaviour
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-<return>") #'bipin/org-insert-heading-with-checkbox))
+
+;; FIXME: This is not working, more investigation needed.
+(defun bipin/org-checkbox-in-headline-faces ()
+  "Fontify [-] and [X] in org headings like TODO states."
+  (interactive)
+  (font-lock-add-keywords
+   'org-mode
+   '(("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[ \\]\\).*" 1 'org-todo prepend)
+     ("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[-\\]\\).*" 1 'org-warning prepend)
+     ("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[X\\]\\).*" 1 'org-done prepend)))
+  (font-lock-flush)
+  (font-lock-ensure))
+
+(add-hook 'org-mode-hook 'bipin/org-checkbox-in-headline-faces)
+
+(defun bipin/org-cycle-checkbox-in-headline (reverse)
+  "Cycle checkbox state in heading between [ ], [-], [X].
+If REVERSE is non-nil (e.g. from prefix arg or wrapper), cycle backward."
+  (interactive "P")
+  (save-excursion
+    (beginning-of-line)
+    (when (looking-at "^\\(\\*+ \\)\\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
+      (let* ((stars (match-string 1))
+             (priority (or (match-string 2) ""))
+             (checkbox (match-string 3))
+             (new-checkbox
+              (cond
+               ((string= checkbox "[ ]") (if reverse "[X]" "[-]"))
+               ((string= checkbox "[-]") (if reverse "[ ]" "[X]"))
+               ((string= checkbox "[X]") (if reverse "[-]" "[ ]"))
+               (t checkbox))))
+        (replace-match
+         (concat stars priority new-checkbox)
+         t t)))))
+
+(defun bipin/org-smart-shift-right ()
+  "Cycle checkbox if present, otherwise use Org's default S-<right> behavior."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (if (looking-at "^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
+        (bipin/org-cycle-checkbox-in-headline nil)
+      (org-shiftright))))
+
+(defun bipin/org-smart-shift-left ()
+  "Reverse-cycle checkbox if present, otherwise use Org's default S-<left> behavior."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (if (looking-at "^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
+        (bipin/org-cycle-checkbox-in-headline t)
+      (org-shiftleft))))
+
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "S-<right>") #'bipin/org-smart-shift-right)
+  (define-key org-mode-map (kbd "S-<left>") #'bipin/org-smart-shift-left))
+
 (use-package git-timemachine
   :ensure t
   :after git-timemachine
