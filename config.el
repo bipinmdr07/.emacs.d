@@ -207,65 +207,14 @@
 	  (insert "[ ] "))
       (org-insert-heading)))) ;; fallback to default behaviour
 
-(with-eval-after-load 'org
-  (define-key org-mode-map (kbd "C-<return>") #'bipin/org-insert-heading-with-checkbox))
+  (define-key org-mode-map (kbd "C-<return>") #'bipin/org-insert-heading-with-checkbox)
 
-;; FIXME: This is not working, more investigation needed.
-(defun bipin/org-checkbox-in-headline-faces ()
-  "Fontify [-] and [X] in org headings like TODO states."
-  (interactive)
-  (font-lock-add-keywords
-   'org-mode
-   '(("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[ \\]\\).*" 1 'org-todo prepend)
-     ("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[-\\]\\).*" 1 'org-warning prepend)
-     ("^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[X\\]\\).*" 1 'org-done prepend)))
-  (font-lock-flush)
-  (font-lock-ensure))
+(defun org-clock-todo-change ()
+  (if (string= org-state "[-]")
+      (org-clock-in)
+    (org-clock-out-if-current)))
 
-(add-hook 'org-mode-hook 'bipin/org-checkbox-in-headline-faces)
-
-(defun bipin/org-cycle-checkbox-in-headline (reverse)
-  "Cycle checkbox state in heading between [ ], [-], [X].
-If REVERSE is non-nil (e.g. from prefix arg or wrapper), cycle backward."
-  (interactive "P")
-  (save-excursion
-    (beginning-of-line)
-    (when (looking-at "^\\(\\*+ \\)\\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
-      (let* ((stars (match-string 1))
-             (priority (or (match-string 2) ""))
-             (checkbox (match-string 3))
-             (new-checkbox
-              (cond
-               ((string= checkbox "[ ]") (if reverse "[X]" "[-]"))
-               ((string= checkbox "[-]") (if reverse "[ ]" "[X]"))
-               ((string= checkbox "[X]") (if reverse "[-]" "[ ]"))
-               (t checkbox))))
-        (replace-match
-         (concat stars priority new-checkbox)
-         t t)))))
-
-(defun bipin/org-smart-shift-right ()
-  "Cycle checkbox if present, otherwise use Org's default S-<right> behavior."
-  (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (if (looking-at "^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
-        (bipin/org-cycle-checkbox-in-headline nil)
-      (org-shiftright))))
-
-(defun bipin/org-smart-shift-left ()
-  "Reverse-cycle checkbox if present, otherwise use Org's default S-<left> behavior."
-  (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (if (looking-at "^\\*+ \\(\\[#[A-Z]\\] \\)?\\(\\[.\\]\\)")
-        (bipin/org-cycle-checkbox-in-headline t)
-      (org-shiftleft))))
-
-
-(with-eval-after-load 'org
-  (define-key org-mode-map (kbd "S-<right>") #'bipin/org-smart-shift-right)
-  (define-key org-mode-map (kbd "S-<left>") #'bipin/org-smart-shift-left))
+(add-hook 'org-after-todo-state-change-hook #'org-clock-todo-change)
 
 (use-package git-timemachine
   :ensure t
@@ -619,6 +568,7 @@ If REVERSE is non-nil (e.g. from prefix arg or wrapper), cycle backward."
 
   (bipin/leader-keys
    "." '(find-file :wk "Find file")
+   ":" '(execute-extended-command :wk "M-x:")
    "=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
    "/" '(comment-line :wk "Comment lines")
    "u" '(universal-argument :wk "Universal argument"))
@@ -812,6 +762,11 @@ If REVERSE is non-nil (e.g. from prefix arg or wrapper), cycle backward."
 ;; set relaive line numbers globally
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode t)
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)" "CANCELED(c)")
+	(sequence "[ ](T)" "[-](I)" "|" "[X](D)")))
+(setq org-insert-heading-respect-content t)
 
 (use-package shell-pop
   :ensure t
