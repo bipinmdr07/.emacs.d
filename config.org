@@ -939,6 +939,11 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
 ;; Activate the undo-tree minor mode globally
 (global-undo-tree-mode 1))
 
+;; move all undo history to separate location.
+(setq undo-tree-history-directory-alist
+      `(("." . ,(expand-file-name "undo-tree-history/" user-emacs-directory)))
+      undo-tree-auto-save-history t)
+
 #+end_src
 
 * DEFAULTS

@@ -751,6 +751,11 @@
 ;; Activate the undo-tree minor mode globally
 (global-undo-tree-mode 1))
 
+;; move all undo history to separate location.
+(setq undo-tree-history-directory-alist
+      `(("." . ,(expand-file-name "undo-tree-history/" user-emacs-directory)))
+      undo-tree-auto-save-history t)
+
 (delete-selection-mode 1) ;; You can select text and delete it by typing.
 (electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
 
