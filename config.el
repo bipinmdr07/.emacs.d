@@ -843,6 +843,11 @@
 	highlight-indent-guides-auto-even-face-perc 25
 	highlight-indent-guides-auto-character-face-perc 50))
 
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (use-package format-all
   :ensure t
   :hook (prog-mode . (lambda()

@@ -1053,6 +1053,14 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 	highlight-indent-guides-auto-character-face-perc 50))
 #+end_src
 
+** Editor config
+#+begin_src emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+#+end_src
+
 ** Format all
 #+begin_src emacs-lisp
 (use-package format-all
