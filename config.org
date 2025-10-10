@@ -410,6 +410,13 @@ This package implements hiding or abbreviation of the modeline displays (lighers
 
 #+end_src
 
+* LANGUAGE Support
+Emacs has built-in programming language modes for Lisp, ...
+#+begin_src emacs-lisp
+(use-package go-mode :ensure t :defer t)
+(use-package web-mode :ensure t :defer t)
+#+end_src
+
 * COMPANY
 [[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything". Completion will start automatically after you type a few letters. Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
 
@@ -997,6 +1004,21 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 ;; This will clone the package inside elpaca/repos/doom-snippets
 (elpaca (doom-snippets :host github :repo "doomemacs/snippets" :depends (yasnippet)))
 (elpaca-wait)
+#+end_src
+
+* EDITOR
+** Indent Guide
+#+begin_src emacs-lisp
+(use-package highlight-indent-guides
+  :ensure t
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character ;; or 'character 'fill, or bitmap'
+	highlight-indent-guides-character ?\│ ; nice Unicode vertical bar
+	highlight-indent-guides-auto-enabled t
+	highlight-indent-guides-auto-odd-face-perc 25
+	highlight-indent-guides-auto-even-face-perc 25
+	highlight-indent-guides-auto-character-face-perc 50))
 #+end_src
 
 * THEME

@@ -294,6 +294,9 @@
 ;;   :ensure t
 ;;   :init (all-the-icons-ivy-rich-mode 1))
 
+(use-package go-mode :ensure t :defer t)
+(use-package web-mode :ensure t :defer t)
+
 (use-package company
    :ensure t
    :defer 2
@@ -796,6 +799,17 @@
 ;; This will clone the package inside elpaca/repos/doom-snippets
 (elpaca (doom-snippets :host github :repo "doomemacs/snippets" :depends (yasnippet)))
 (elpaca-wait)
+
+(use-package highlight-indent-guides
+  :ensure t
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character ;; or 'character 'fill, or bitmap'
+	highlight-indent-guides-character ?\│ ; nice Unicode vertical bar
+	highlight-indent-guides-auto-enabled t
+	highlight-indent-guides-auto-odd-face-perc 25
+	highlight-indent-guides-auto-even-face-perc 25
+	highlight-indent-guides-auto-character-face-perc 50))
 
 (use-package doom-themes
   :ensure t
