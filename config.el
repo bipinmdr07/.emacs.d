@@ -811,6 +811,18 @@
 	highlight-indent-guides-auto-even-face-perc 25
 	highlight-indent-guides-auto-character-face-perc 50))
 
+(use-package format-all
+  :ensure t
+  :hook (prog-mode . (lambda()
+			(format-all-ensure-formatter)
+			(add-hook 'before-save-hook #'format-all-buffer nil t)))
+  :config
+  (setq format-all-default-formatters
+	'(("Python" black)
+	  ("JavaScript" prettier)
+	  ("JSON" prettier)
+	  ("Go" gofmt))))
+
 (use-package doom-themes
   :ensure t
   :custom

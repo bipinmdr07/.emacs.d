@@ -1021,6 +1021,22 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 	highlight-indent-guides-auto-character-face-perc 50))
 #+end_src
 
+** Format all
+#+begin_src emacs-lisp
+(use-package format-all
+  :ensure t
+  :hook (prog-mode . (lambda()
+			(format-all-ensure-formatter)
+			(add-hook 'before-save-hook #'format-all-buffer nil t)))
+  :config
+  (setq format-all-default-formatters
+	'(("Python" black)
+	  ("JavaScript" prettier)
+	  ("JSON" prettier)
+	  ("Go" gofmt))))
+
+#+end_src
+
 * THEME
 #+begin_src emacs-lisp
   (use-package doom-themes
