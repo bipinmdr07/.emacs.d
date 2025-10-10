@@ -14,6 +14,7 @@
      "5c7720c63b729140ed88cf35413f36c728ab7c70f8cd8422d9ee1cedeb618de5"
      "56044c5a9cc45b6ec45c0eb28df100d3f0a576f18eef33ff8ff5d32bac2d9700"
      default))
+ '(org-agenda-files '("~/Sync/org/todo.org"))
  '(package-selected-packages '(exec-path-from-shell flymake magit map transient-cycles)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

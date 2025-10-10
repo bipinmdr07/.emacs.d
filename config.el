@@ -675,11 +675,37 @@
   (bipin/leader-keys
     "m" '(:ignore t :wk "Org more")
     "m b" '(:ignore t :wk "Tables")
-    "m b -" '(org-table-insert-hline :wk "Insert hline in table"))
+    "m b -" '(org-table-insert-hline :wk "Insert hline in table")
+    "m b t" '(org-table-create :wk "Create table")
+    "m b r" '(org-table-recalculate :wk "Recalculate table"))
 
   (bipin/leader-keys
-    "m d" '(:ignore t :wk "Date/deadline")
-    "m d t" '(org-time-stamp :wk "Org time stamp"))
+    "m c" '(:ignore t :wk "Clock")
+    "m c i" '(org-clock-in :wk "Clock in")
+    "m c o" '(org-clock-out :wk "Clock out")
+    "m c g" '(org-clock-goto :wk "Goto current clock")
+    "m c r" '(org-clock-report :wk "Clock report")
+    "m c d" '(org-clock-display :wk "Display clock times")
+    "m c C" '(org-clock-cancel :wk "Cancel clock"))
+
+  ;; Schedule / Deadlines / Timestamps
+  (bipin/leader-keys
+    "m d" '(:ignore t :wk "Dates / Schedules")
+    "m d d" '(org-deadline :wk "Set deadline")
+    "m d s" '(org-schedule :wk "Schedule task")
+    "m d t" '(org-time-stamp :wk "Insert timestamp")
+    "m d T" '(org-time-stamp-inactive :wk "Insert inactive timestamp"))
+
+  (bipin/leader-keys
+    "m i" '(:ignore t :wk "Insert")
+    "m i l" '(org-insert-link :wk "Insert link")
+    "m i d" '(org-insert-drawer :wk "Insert drawer")
+    "m i s" '(org-insert-structure-template :wk "Insert structure"))
+
+  (bipin/leader-keys
+    "m r" '(:ignore t :wk "Refile/archive")
+    "m r r" '(org-refile :wk "Refile")
+    "m r a" '(org-archive-subtree :wk "Archive subtree"))
 
   (bipin/leader-keys
     "o" '(:ignore t :wk "Open")
@@ -774,6 +800,7 @@
 (setq org-todo-keywords
       '((sequence "TODO(t)" "IN-PROGRESS(i)" "|" "DONE(d)" "CANCELED(c)")
 	(sequence "[ ](T)" "[-](I)" "|" "[X](D)")))
+(setq org-agenda-files '("~/Sync/org/todo.org"))
 (setq org-insert-heading-respect-content t)
 
 (use-package shell-pop

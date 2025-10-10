@@ -6,6 +6,9 @@
 /elpaca/
 /packages/ # if you use package.el directly
 
+#org files
+org-clock-save.el
+
 # Compiled files and caches
 /eln-cache/
 *.elc
