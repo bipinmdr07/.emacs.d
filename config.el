@@ -834,6 +834,16 @@
   :config
   (evil-multiedit-default-keybinds))
 
+(use-package diff-hl
+  :ensure t
+  :init
+  (global-diff-hl-mode)
+  :hook ((prog-mode . diff-hl-mode)
+         (dired-mode . diff-hl-dired-mode)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config
+  (diff-hl-flydiff-mode))
+
 (use-package doom-themes
   :ensure t
   :custom
