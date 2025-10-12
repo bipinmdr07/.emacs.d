@@ -300,6 +300,7 @@
   :init
   (setq lsp-auto-guess-root t
 	lsp-prefer-flymake nil)
+  :hook (prog-mode . lsp-deferred)
   :custom
   (lsp-completion-provider :capf)
   (lsp-enable-snippet t))
