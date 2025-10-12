@@ -685,6 +685,9 @@
     "h x" '(describe-command :wk "Display full documentation for command"))
 
   (bipin/leader-keys
+    "l" '(:keymap lsp-command-map :package lsp-mode :wk "LSP"))
+
+  (bipin/leader-keys
     "n" '(:ignore t :wk "Org")
     "n a" '(org-agenda :wk "Org agenda")
     "n d" '(deft :wk "Deft")
