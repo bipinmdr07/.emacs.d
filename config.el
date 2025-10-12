@@ -294,26 +294,47 @@
 ;;   :ensure t
 ;;   :init (all-the-icons-ivy-rich-mode 1))
 
-(use-package go-mode :ensure t :defer t)
-(use-package web-mode :ensure t :defer t)
+;; LSP Core
+(use-package lsp-mode
+  :ensure t
+  :init
+  (setq lsp-auto-guess-root t
+	lsp-prefer-flymake nil)
+  :custom
+  (lsp-completion-provider :capf)
+  (lsp-enable-snippet t))
+
+;; LSP UI, for hover/doc/popups
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode))
+
+(use-package go-mode
+  :ensure t
+  :hook (go-mode . lsp-deferred))
+
+;; (use-package web-mode
+;;   :ensure t
+;;   :hook (web-hook . lsp-deferred)
+;; )
 
 (use-package company
-   :ensure t
-   :defer 2
-   :diminish
-   :custom
-   (company-begin-command '(self-insert-command))
-   (company-idle-delay .1)
-   (company-minimum-prefix-length 2)
-   (company-show-numbers t)
-   (company-tooltip-align-annotations 't)
-   (global-company-mode t))
+  :ensure t
+  :defer 2
+  :diminish
+  :custom
+  (company-begin-command '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
 
- (use-package company-box
-:ensure t
-   :after company
-   :diminish
-   :hook (company-mode . company-box-mode))
+(use-package company-box
+  :ensure t
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
 
 (use-package dired-open
   :ensure t
