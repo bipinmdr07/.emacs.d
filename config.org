@@ -421,6 +421,7 @@ Emacs has built-in programming language modes for Lisp, ...
   :init
   (setq lsp-auto-guess-root t
 	lsp-prefer-flymake nil)
+  :hook (prog-mode . lsp-deferred)
   :custom
   (lsp-completion-provider :capf)
   (lsp-enable-snippet t))
@@ -433,6 +434,10 @@ Emacs has built-in programming language modes for Lisp, ...
 (use-package go-mode
   :ensure t
   :hook (go-mode . lsp-deferred))
+
+(use-package dockerfile-mode :ensure t)
+
+(use-package yaml-mode :ensure t)
 
 ;; (use-package web-mode
 ;;   :ensure t
@@ -868,6 +873,9 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
     "h x" '(describe-command :wk "Display full documentation for command"))
 
   (bipin/leader-keys
+    "l" '(:keymap lsp-command-map :package lsp-mode :wk "LSP"))
+
+  (bipin/leader-keys
     "n" '(:ignore t :wk "Org")
     "n a" '(org-agenda :wk "Org agenda")
     "n d" '(deft :wk "Deft")
@@ -999,7 +1007,7 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 
 #+begin_src emacs-lisp
 (delete-selection-mode 1) ;; You can select text and delete it by typing.
-(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
+;;(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
 
 (global-auto-revert-mode t) ;; Automatically show changes if the file has changed
 (global-display-line-numbers-mode 1) ;; Display line numbers

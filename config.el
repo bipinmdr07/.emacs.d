@@ -314,6 +314,10 @@
   :ensure t
   :hook (go-mode . lsp-deferred))
 
+(use-package dockerfile-mode :ensure t)
+
+(use-package yaml-mode :ensure t)
+
 ;; (use-package web-mode
 ;;   :ensure t
 ;;   :hook (web-hook . lsp-deferred)
@@ -808,7 +812,7 @@
       undo-tree-auto-save-history t)
 
 (delete-selection-mode 1) ;; You can select text and delete it by typing.
-(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
+;;(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
 
 (global-auto-revert-mode t) ;; Automatically show changes if the file has changed
 (global-display-line-numbers-mode 1) ;; Display line numbers
