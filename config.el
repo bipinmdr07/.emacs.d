@@ -310,18 +310,13 @@
   :ensure t
   :hook (lsp-mode . lsp-ui-mode))
 
-(use-package go-mode
-  :ensure t
-  :hook (go-mode . lsp-deferred))
+(use-package go-mode :ensure t)
 
 (use-package dockerfile-mode :ensure t)
 
 (use-package yaml-mode :ensure t)
 
-;; (use-package web-mode
-;;   :ensure t
-;;   :hook (web-hook . lsp-deferred)
-;; )
+(use-package web-mode :ensure t)
 
 (use-package company
   :ensure t
@@ -471,6 +466,7 @@
           treemacs-project-follow-cleanup          nil
           treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
           treemacs-position                        'left
+	  treemacs-project-follow-up t
           treemacs-read-string-input               'from-child-frame
           treemacs-recenter-distance               0.1
           treemacs-recenter-after-file-follow      nil
@@ -481,8 +477,8 @@
           treemacs-project-follow-into-home        nil
           treemacs-show-cursor                     nil
           treemacs-show-hidden-files               t
-          treemacs-silent-filewatch                nil
-          treemacs-silent-refresh                  nil
+          treemacs-silent-filewatch                t
+          treemacs-silent-refresh                  t
           treemacs-sorting                         'alphabetic-asc
           treemacs-select-when-already-in-treemacs 'move-back
           treemacs-space-between-root-nodes        t
@@ -528,20 +524,24 @@
         ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-evil
-  :after (treemacs evil)
-  :ensure t)
+  :ensure t
+  :after (treemacs evil))
 
 (use-package treemacs-projectile
+  :ensure t
   :after (treemacs projectile)
-  :ensure t)
+  :hook (treemacs-mode . treemacs-project-follow-mode)
+  )
 
 (use-package treemacs-icons-dired
+  :ensure t
   :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
+  :config
+  (setq projectile-switch-project-action 'treemacs-projectile-switch-project))
 
 (use-package treemacs-magit
-  :after (treemacs magit)
-  :ensure t)
+  :ensure t
+  :after (treemacs magit))
 
 ;; (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
 ;;   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
@@ -549,8 +549,8 @@
 ;;   :config (treemacs-set-scope-type 'Perspectives))
 
  (use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
-  :after (treemacs)
   :ensure t
+  :after (treemacs)
   :config (treemacs-set-scope-type 'Tabs))
 
 (defun bipin/flycheck-set-temp-dir ()
@@ -787,6 +787,16 @@
     "w J" '(buf-move-down :wk "Buffer move down")
     "w K" '(buf-move-up :wk "Buffer move up")
     "w L" '(buf-move-right :wk "Buffer move right"))
+
+  ;; Flycheck
+  (bipin/leader-keys
+    "x" '(:ignore t :wk "Flycheck")
+    "x l" '(flycheck-list-errors :wk "Flycheck list errors")
+    "x n" '(flycheck-next-error :wk "Flychck next error")
+    "x p" '(flycheck-previous-error :wk "Flychck previous error")
+    "x c" '(flycheck-buffer :wk "Flycheck buffer")
+    "x e" '(flycheck-explain-error :wk "Flycheck explain error")
+     )
 
   )
 
