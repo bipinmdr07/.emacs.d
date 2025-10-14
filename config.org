@@ -438,6 +438,33 @@ Emacs has built-in programming language modes for Lisp, ...
 (use-package yaml-mode :ensure t)
 
 (use-package web-mode :ensure t)
+
+(use-package python-mode :ensure t)
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1)) ;; enables automatic pyenv tracking
+
+(defun my/auto-activate-venv ()
+  "Auto-activate Python virtualenv from project root if venv or .venv directory exists."
+  (when (eq major-mode 'python-mode)
+    (let* ((project-root (or (when (fboundp 'project-root)
+                               (project-root (project-current)))
+                             (locate-dominating-file default-directory "venv")
+                             (locate-dominating-file default-directory ".venv")))
+           (venv-path (cond
+                       ((and project-root (file-directory-p (expand-file-name "venv" project-root)))
+                        (expand-file-name "venv" project-root))
+                       ((and project-root (file-directory-p (expand-file-name ".venv" project-root)))
+                        (expand-file-name ".venv" project-root)))))
+      (when (and venv-path
+                 (not (string-equal pyvenv-virtual-env venv-path)))
+        (pyvenv-activate venv-path)
+        (message "Activated virtualenv: %s" venv-path)))))
+
+(add-hook 'python-mode-hook #'my/auto-activate-venv)
+
 #+end_src
 
 * COMPANY
