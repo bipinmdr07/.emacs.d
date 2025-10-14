@@ -842,6 +842,22 @@
 (setq org-agenda-files '("~/Sync/org/todo.org"))
 (setq org-insert-heading-respect-content t)
 
+;; Org babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+'((emacs-lisp . t)
+  (python . t)
+  (shell . t)
+  (js . t)
+  ))
+
+;; Disable confirmation prompt before executing code blocks
+(setq org-confirm-babel-evaluate nil)
+
+;; Enable syntax hightlight in codeblocks
+(setq org-src-fontify-natively t
+      org-src-tab-acts-natively t)
+
 (use-package shell-pop
   :ensure t
   :hook ((shell-mode . (lambda () (company-mode -1))))
