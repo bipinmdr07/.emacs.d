@@ -99,7 +99,7 @@ By default, Emacs creates automatic backups of file in their original directorie
   :ensure t
   :after evil
   :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  ;; (setq evil-collection-mode-list '(dashboard dired ibuffer))
   (evil-collection-init))
 
 ;;Turns off elpaca-use-package-mode current declaration
@@ -365,111 +365,97 @@ This package implements hiding or abbreviation of the modeline displays (lighers
   (use-package diminish :ensure t)
 #+end_src
 
-* IVY (COUNSEL)
-- Ivy, a generic completion mechanism for Emacs.
-- Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
-- Ivy-rich allows us to add descriptions alongside the commands in M-x.
-
-#+begin_src emacs-lisp
-(use-package counsel
-  :ensure t
-  :after ivy
-  :diminish
-  :config
-  (counsel-mode 1)
-  (setq ivy-initial-inputs-alist nil)) ;; removes starting ^ regex in M-x
-
-(use-package ivy
-  :ensure t
-  :bind
-  ;; ivy-resume resumes the last Ivy-based completion.
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
-  :diminish
-  :custom
-  (setq ivy-use-virtual-buffers t
-	ivy-count-format "(%d/%d) "
-	enable-recursive-minibuffers t
-	ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-  :config
-  (ivy-mode 1))
-
-(use-package ivy-rich
-  :after ivy
-  :ensure t
-  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
-  :custom
-  (ivy-virtual-abbreviate 'full)
-  (ivy-rich-switch-buffer-align-virtual-buffer t)
-  (ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-			       'ivy-rich-switch-buffer-transformer))
-
-;; (use-package all-the-icons-ivy-rich
-;;   :ensure t
-;;   :init (all-the-icons-ivy-rich-mode 1))
-
-#+end_src
 
 * LANGUAGE Support
 Emacs has built-in programming language modes for Lisp, ...
 
 ** Languages
 #+begin_src emacs-lisp
-        ;; LSP Core
-        (use-package lsp-mode
-          :ensure t
-          :commands (lsp lsp-deferred)
-          :hook (prog-mode . lsp-deferred)
-          :custom
-          (lsp-completion-provider :capf)
-          (lsp-enable-snippet t)
-          (lsp-auto-guess-root t)
-  	(lsp-prefer-flymake nil))
+;; LSP Core
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (prog-mode . lsp-deferred)
+  :custom
+  (lsp-completion-provider :capf)
+  (lsp-enable-snippet t)
+  (lsp-auto-guess-root t)
+	(lsp-prefer-flymake nil))
 
-        ;; LSP UI, for hover/doc/popups
-        (use-package lsp-ui
-          :ensure t
-          :hook (lsp-mode . lsp-ui-mode))
+;; LSP UI, for hover/doc/popups
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode))
 
-        (use-package go-mode :ensure t)
+(use-package go-mode
+  :ensure t
+  :config
+  (setq tab-width: 2
+	indent-tabs-mode t))
 
-        (use-package dockerfile-mode :ensure t)
+(use-package dockerfile-mode :ensure t)
 
-        (use-package yaml-mode :ensure t)
+(use-package yaml-mode
+  :ensure t
+  :mode("\\.yml\\'" "\\.yaml\\'")
+  :config
+  (setq yaml-indent-offset 2
+	tab-width 2))
 
-        (use-package web-mode :ensure t)
+(use-package js
+  :ensure nil
+  :mode "\\.js\\'"
+  :config
+  (setq js-indent-level 2))
 
-        (use-package python-mode :ensure t)
+(use-package web-mode
+	:ensure t
+	:config
+	(setq web-mode-markup-indent-offset 2
+	      web-mode-css-indent-offset 2
+	      web-mode-code-indent-offset 2
+	      web-mode-attr-indent-offset 2
+	      tab-width 2))
 
-        (use-package json-mode :ensure t)
+(use-package python-mode :ensure t)
 
-        (use-package typescript-mode :ensure t)
+(use-package json-mode
+  :ensure t
+  :config
+  (setq js-indent-level 2
+	json-reformat:indent-width 2
+	tab-width 2))
 
-        (use-package pyvenv
-          :ensure t
-          :config
-          (pyvenv-mode 1)) ;; enables automatic pyenv tracking
+(use-package typescript-mode
+	 :ensure t
+	 :mode ("\\.ts\\'" "\\.tsx\\'")
+	 :config
+	 (setq typescript-indent-level 2
+	       tab-width 2))
 
-        (defun my/auto-activate-venv ()
-          "Auto-activate Python virtualenv from project root if venv or .venv directory exists."
-          (when (eq major-mode 'python-mode)
-            (let* ((project-root (or (when (fboundp 'project-root)
-                                       (project-root (project-current)))
-                                     (locate-dominating-file default-directory "venv")
-                                     (locate-dominating-file default-directory ".venv")))
-                   (venv-path (cond
-                               ((and project-root (file-directory-p (expand-file-name "venv" project-root)))
-                                (expand-file-name "venv" project-root))
-                               ((and project-root (file-directory-p (expand-file-name ".venv" project-root)))
-                                (expand-file-name ".venv" project-root)))))
-              (when (and venv-path
-                         (not (string-equal pyvenv-virtual-env venv-path)))
-                (pyvenv-activate venv-path)
-                (message "Activated virtualenv: %s" venv-path)))))
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1)) ;; enables automatic pyenv tracking
 
-        (add-hook 'python-mode-hook #'my/auto-activate-venv)
+(defun my/auto-activate-venv ()
+  "Auto-activate Python virtualenv from project root if venv or .venv directory exists."
+  (when (eq major-mode 'python-mode)
+    (let* ((project-root (or (when (fboundp 'project-root)
+                               (project-root (project-current)))
+                             (locate-dominating-file default-directory "venv")
+                             (locate-dominating-file default-directory ".venv")))
+           (venv-path (cond
+                       ((and project-root (file-directory-p (expand-file-name "venv" project-root)))
+                        (expand-file-name "venv" project-root))
+                       ((and project-root (file-directory-p (expand-file-name ".venv" project-root)))
+                        (expand-file-name ".venv" project-root)))))
+      (when (and venv-path
+                 (not (string-equal pyvenv-virtual-env venv-path)))
+        (pyvenv-activate venv-path)
+        (message "Activated virtualenv: %s" venv-path)))))
+
+(add-hook 'python-mode-hook #'my/auto-activate-venv)
 
 #+end_src
 
@@ -619,12 +605,6 @@ Display the actual color as a background for any hex color value (ex. #ffffff). 
   :demand t
   :config
   (projectile-mode 1))
-
-(use-package counsel-projectile
-  :ensure t
-  :after (counsel projectile)
-  :config
-  (counsel-projectile-mode))
 
 #+end_src
 
@@ -776,11 +756,96 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
 
 #+end_src
 
-* CONSULT
+* VERTICO AND CONSULT
 #+begin_src emacs-lisp
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode)
+  :config
+  :bind (:map vertico-map
+	      ("C-j" . vertico-next)
+	      ("C-k" . vertico-previous)
+	      ("C-d" . vertico-scroll-up)
+	      ("C-u" . vertico-scroll-down)))
+
+;; Orderless - flexible completion style
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+;; Marginalia - rich annotations in minibuffer
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode)
+  :bind (:map minibuffer-local-map
+	      ("M-A" . marginalia-cycle)))
+
+;; Consult - enhanced commands
 (use-package consult
   :ensure t
-  :commands (consult-ripgrep consult-find project-find-file))
+  :bind (;; C-c bindings (mode-specific-map)
+         ("C-c h" . consult-history)
+         ("C-c m" . consult-mode-command)
+         ("C-c k" . consult-kmacro)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)
+         ("C-x b" . consult-buffer)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ("C-x r b" . consult-bookmark)
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)
+         ("M-g g" . consult-goto-line)
+         ("M-g M-g" . consult-goto-line)
+         ("M-g o" . consult-outline)
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s m" . consult-multi-occur)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines))
+  :config
+  ;; Preview configuration
+  (consult-customize
+   consult-theme
+   :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-recent-file
+   consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any)))
+
+;; Embark - context actions
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)
+   ("C-;" . embark-dwim)
+   ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+;; Embark + Consult integration
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 #+end_src
 
@@ -793,7 +858,7 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
 		     (buffer-substring-no-properties (region-beginning) (region-end))
 		   (thing-at-point 'symbol t))))
     (if symbol
-	(consult-ripgrep (project-root (project-current)) symbol)
+    (consult-ripgrep (project-root (project-current)) symbol)
       (consult-ripgrep (project-root (project-current))))))
 
 (defun bipin/counsel-rg-setup ()
@@ -824,11 +889,11 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
    "=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
    "/" '(comment-line :wk "Comment lines")
    "u" '(universal-argument :wk "Universal argument")
-   "SPC" '(counsel-find-file :wk "Find file"))
+   "SPC" '(projectile-find-file :wk "Find file"))
 
   (bipin/leader-keys
     "b" '(:ignore t :wk "Bookmarks/Buffers")
-    "b b" '(switch-to-buffer :wk "Switch to buffer")
+    "b b" '(consult-buffer :wk "Switch to buffer")
     "b c" '(clone-indirect-buffer :wk "Create indirect buffer copy in a split")
     "b C" '(clone-indirect-buffer-other-window :wk "Clone indirect buffer in new window")
     "b d" '(bookmark-delete :wk "Delete bookmark")
@@ -860,13 +925,13 @@ Flycheck checks the syntax and lint issue on the fly for the current file. For m
 	      (dired "~/.emacs.d/"))
 	    :wk "Open use-emacs-directory in dired")
     "f d" '(find-grep-dired :wk "Search for string in files in DIR")
-    "f g" '(counsel-grep-or-swiper :wk "Search for string current file")
+    "f g" '(consult-line :wk "Search for string current file")
     "f i" '((lambda () (interactive)
 	      (find-file "~/.emacs.d/init.el"))
 	    :wk "Open emacs init.el")
-    "f j" '(counsel-file-jump :wk "Jump to a file below current directory")
+    "f j" '(consult-file :wk "Jump to a file below current directory")
     "f l" '(counsel-locate :wk "Locate a file")
-    "f r" '(counsel-recentf :wk "Find recent files")
+    "f r" '(counsel-recent-file :wk "Find recent files")
     )
 
   (bipin/leader-keys
@@ -1202,25 +1267,25 @@ The following setting are simple modes that are enabled (or disabled) so that Em
 
 * THEME
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t
-    :custom
-    ;; Global > settings (defaults)
-    (doom-themes-enable-bold t)
-    (doom-themes-enable-italic t)
-    ;; for treemacs users
-    (doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-    :config
-    (load-theme 'doom-one t)
+(use-package doom-themes
+  :ensure t
+  :custom
+  ;; Global > settings (defaults)
+  (doom-themes-enable-bold t)
+  ;; (doom-themes-enable-italic t)
+  ;; for treemacs users
+  (doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  :config
+  (load-theme 'doom-one t)
 
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
-    ;; Enable custom neotree theme (nerd-icons must be installed!)
-    (doom-themes-neotree-config)
-    ;; or for treemacs users
-    (doom-themes-treemacs-config)
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (nerd-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  ;; (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 #+end_src
 
 * WHICH KEY
