@@ -78,7 +78,7 @@
   :ensure t
   :after evil
   :config
-  (setq evilcollection-mode-list '(dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(dashboard dired ibuffer))
   (evil-collection-init))
 
 ;;Turns off elpaca-use-package-mode current declaration
@@ -107,7 +107,7 @@
   :ensure t
   :commands (buf-move-left buf-move-down buf-move-up buf-move-right))
 
-(use-package dashboard
+(use-package dashboard			
   :ensure t
   :init
   (setq initial-buffer-choice 'dashboard-open)
@@ -226,12 +226,13 @@
 
 (use-package transient
   :ensure t
-  :demand t) ; Forces the external package to load immediately
+  :demand t)
 
 (use-package magit
   :ensure t
   :config
-  (add-hook 'git-commit-setup-hook #'evil-insert-state))
+  (add-hook 'git-commit-setup-hook #'evil-insert-state)
+  (add-hook 'git-commit-setup-hook (lambda () (auto-revert-mode -1))))
 
 (defun bipin/add-branch-name-to-commit-message ()
   "Prepare the current branch name to the commit message, unless it's a common env branch."
@@ -261,7 +262,7 @@
   :after ivy
   :diminish
   :config
-  (counsel-mode)
+  (counsel-mode 1)
   (setq ivy-initial-inputs-alist nil)) ;; removes starting ^ regex in M-x
 
 (use-package ivy
@@ -272,11 +273,12 @@
    ("C-x B" . ivy-switch-buffer-other-window))
   :diminish
   :custom
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t)
+  (setq ivy-use-virtual-buffers t
+	ivy-count-format "(%d/%d) "
+	enable-recursive-minibuffers t
+	ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   :config
-  (ivy-mode))
+  (ivy-mode 1))
 
 (use-package ivy-rich
   :after ivy
@@ -297,13 +299,13 @@
 ;; LSP Core
 (use-package lsp-mode
   :ensure t
-  :init
-  (setq lsp-auto-guess-root t
-	lsp-prefer-flymake nil)
+  :commands (lsp lsp-deferred)
   :hook (prog-mode . lsp-deferred)
   :custom
   (lsp-completion-provider :capf)
-  (lsp-enable-snippet t))
+  (lsp-enable-snippet t)
+  (lsp-auto-guess-root t)
+(lsp-prefer-flymake nil))
 
 ;; LSP UI, for hover/doc/popups
 (use-package lsp-ui
@@ -319,6 +321,10 @@
 (use-package web-mode :ensure t)
 
 (use-package python-mode :ensure t)
+
+(use-package json-mode :ensure t)
+
+(use-package typescript-mode :ensure t)
 
 (use-package pyvenv
   :ensure t
@@ -346,15 +352,14 @@
 
 (use-package company
   :ensure t
-  :defer 2
+  :hook (after-init . global-company-mode)
   :diminish
   :custom
   (company-begin-command '(self-insert-command))
   (company-idle-delay .1)
   (company-minimum-prefix-length 2)
   (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
+  (company-tooltip-align-annotations 't))
 
 (use-package company-box
   :ensure t
@@ -376,7 +381,7 @@
   :after dired
   :hook (evil-normalize-keymaps . peep-dired-hook)
   :config
-  (evil-define-key 'normal dired-mode-map (kdb "h") 'dired-up-directory)
+  (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
   (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-file instead if not using dired-open package
   (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
   (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
@@ -397,22 +402,16 @@
 
 (global-set-key [escape] 'keyboard-escape-quit)
 
-;; Explicit recipe to tell Elpaca how to install doom-modeline
-(elpaca (doom-modeline :host github :repo "doomemacs/doom-modeline"))
-
-(elpaca-wait)
-
-;; Load and configure doom-modeline manually
-(require 'doom-modeline)
-
-;; Enable the modeline
-(doom-modeline-mode 1)
-
-;; Customize settings
-(setq doom-modeline-height 35
-      doom-modeline-bar-width 5
-      doom-modeline-persp-name t
-      doom-modeline-persp-icon t)
+(use-package nerd-icons
+    :ensure t)
+(use-package doom-modeline
+    :ensure t
+    :hook (after-init . doom-modeline-mode)
+    :config
+    (setq doom-modeline-height 35
+        doom-modeline-bar-width 5
+        doom-modeline-persp-name t
+        doom-modeline-persp-icon t))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -451,8 +450,13 @@
   :ensure t
   :demand t
   :config
-  (projectile-mode 1)
-  )
+  (projectile-mode 1))
+
+(use-package counsel-projectile
+  :ensure t
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode))
 
 (use-package treemacs
   :ensure t
@@ -579,34 +583,36 @@
   :after (treemacs)
   :config (treemacs-set-scope-type 'Tabs))
 
-(defun bipin/flycheck-set-temp-dir ()
-  "Create and set the Emacs temporary directory for Flycheck."
-  (let ((tmp-dir (expand-file-name "tmp/flycheck/" user-emacs-directory)))
-    (unless (file-directory-p tmp-dir)
-      (make-directory tmp-dir t))
-    (setq temporary-file-directory tmp-dir)))
-
-(defun bipin/flycheck-cleanup-temp-file ()
-  "Delete Flycheck's temporary file when killing a buffer."
-  (when (fboundp 'flycheck-delete-temp-file)
-    (flycheck-delete-temp-file)))
-
 (use-package flycheck
   :ensure t
   :defer t
   :diminish
   :init
-  ;; Set up temporary directory before enabling flycheck
-  (bipin/flycheck-set-temp-dir)
+  (setq flycheck-temp-prefix ".flycheck")
   (global-flycheck-mode)
   :config
-  ;; Clean up temp files when buffer is killed
-  (add-hook 'kill-buffer-hook #'bipin/flycheck-cleanup-temp-file)
-  (add-hook 'kill-emacs-hook
-          (lambda ()
-            (delete-directory (expand-file-name "tmp/flycheck/" user-emacs-directory)
-                              t)))  ;; t = recursive delete
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
 )
+
+(use-package consult
+  :ensure t
+  :commands (consult-ripgrep consult-find project-find-file))
+
+(defun bipin/search-project-symbol-at-point()
+  "Search the symbol at point (or selection) in the project using consult-ripgrep."
+  (interactive)
+  (let* ((symbol (if (use-region-p)
+		     (buffer-substring-no-properties (region-beginning) (region-end))
+		   (thing-at-point 'symbol t))))
+    (if symbol
+	(consult-ripgrep (project-root (project-current)) symbol)
+      (consult-ripgrep (project-root (project-current))))))
+
+(defun bipin/counsel-rg-setup ()
+  "Make `counsel-rg` update live as you type"
+  (setq ivy--old-re nil)) ;; Reset cache result on keystroke
+
+(advice-add 'counsel-rg :before 'bipin/counsel-rg-setup)
 
 (use-package general
   :ensure t
@@ -623,10 +629,12 @@
 
   (bipin/leader-keys
    "." '(find-file :wk "Find file")
+   "*" '(bipin/search-project-symbol-at-point :wk "Search project")
    ":" '(execute-extended-command :wk "M-x:")
    "=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
    "/" '(comment-line :wk "Comment lines")
-   "u" '(universal-argument :wk "Universal argument"))
+   "u" '(universal-argument :wk "Universal argument")
+   "SPC" '(counsel-find-file :wk "Find file"))
 
   (bipin/leader-keys
     "b" '(:ignore t :wk "Bookmarks/Buffers")
@@ -818,8 +826,8 @@
   (bipin/leader-keys
     "x" '(:ignore t :wk "Flycheck")
     "x l" '(flycheck-list-errors :wk "Flycheck list errors")
-    "x n" '(flycheck-next-error :wk "Flychck next error")
-    "x p" '(flycheck-previous-error :wk "Flychck previous error")
+    "x n" '(flycheck-next-error :wk "Flycheck next error")
+    "x p" '(flycheck-previous-error :wk "Flycheck previous error")
     "x c" '(flycheck-buffer :wk "Flycheck buffer")
     "x e" '(flycheck-explain-error :wk "Flycheck explain error")
      )
@@ -839,13 +847,13 @@
 ;; tell evil-mode to use undo-tree for undo/redo
 (evil-set-undo-system 'undo-tree)
 
-;; Activate the undo-tree minor mode globally
-(global-undo-tree-mode 1))
-
 ;; move all undo history to separate location.
 (setq undo-tree-history-directory-alist
-      `(("." . ,(expand-file-name "undo-tree-history/" user-emacs-directory)))
-      undo-tree-auto-save-history t)
+  `(("." . ,(expand-file-name "undo-tree-history/" user-emacs-directory)))
+  undo-tree-auto-save-history t)
+
+;; Activate the undo-tree minor mode globally
+(global-undo-tree-mode 1))
 
 (delete-selection-mode 1) ;; You can select text and delete it by typing.
 ;;(electric-indent-mode -1) ;; Turn off the weird indentation that Emacs does by default.
@@ -884,6 +892,9 @@
 (setq org-src-fontify-natively t
       org-src-tab-acts-natively t)
 
+(setq counsel-rg-base-command "rg -S --no-heading --line-number --color never %s .")
+(setq ivy-dynamic-exhibit-delay-ms 100)
+
 (use-package shell-pop
   :ensure t
   :hook ((shell-mode . (lambda () (company-mode -1))))
@@ -903,9 +914,9 @@
   :hook ((prog-mode . yas-minor-mode)
 	 (org-mode . yas-minor-mode))
   :config
-  (setq yas-snippet-directly
-	'("~/.emacs.d/snippets" ;; custom snippets location
-	  "~/.emacs.d/elpaca/repos/doom-snippets"))
+  (setq yas-snippet-dirs
+    '("~/.emacs.d/snippets" ;; custom snippets location
+      "~/.emacs.d/elpaca/repos/doom-snippets"))
   (yas-reload-all)
 )
 
@@ -937,7 +948,8 @@
   :config
   (setq format-all-default-formatters
 	'(("Python" black)
-	  ("JavaScript" prettier)
+	  ("JavaScript" eslint)
+	  ("Typescript" eslint)
 	  ("JSON" prettier)
 	  ("Go" gofmt))))
 
